@@ -1,0 +1,15 @@
+  .mat-form-field {
+    width: 100%;
+    min-width: 400px;
+  }
+
+  :host {
+    display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  }
+
+  .mat-mdc-form-field {
+    width: 98%;
+    min-width: 400px;
+  }

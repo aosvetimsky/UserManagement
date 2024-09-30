@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Update User</h2>
+<mat-dialog-content [formGroup]="userForm">
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input type="text" matInput formControlName="email">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>UserName</mat-label>
+    <input type="text" matInput formControlName="userName">
+  </mat-form-field>
+  <mat-checkbox formControlName="isAdmin">Is Admin</mat-checkbox>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button type="submit" color="primary" mat-button mat-primary (click)="updateUser()" *ngIf="!isReadOnlyMode">Save</button>
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+</mat-dialog-actions>

@@ -1,0 +1,7 @@
+<div style="display: inline-block;">
+  <h3>Hello, {{userName | async}}</h3> <button color="primary" mat-button *ngIf="userLoggedIn | async"
+    (click)="logOut()">LogOut</button>
+</div>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

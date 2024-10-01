@@ -19,21 +19,15 @@ export class AppComponent implements OnInit {
         this.router.navigateByUrl('/accounting/login');
       }
       else {
-        this.applicationService.loadUserPermissions().subscribe(s => {
-          this.router.navigateByUrl('/');
-        });
+        this.router.navigateByUrl('/');
       }
     });
-
-    if (!this.applicationService.currentUser) {
-      this.router.navigateByUrl('/accounting/login');
-    }
   }
 
   get userName() {
     return this.applicationService?.$currentUser.pipe(
       map(user => {
-        return user?.userName ?? 'Unknown';
+        return user?.userName ?? 'Guest';
       })
     );
   }
@@ -50,4 +44,3 @@ export class AppComponent implements OnInit {
     this.applicationService.removeCurrentUser();
   }
 }
-

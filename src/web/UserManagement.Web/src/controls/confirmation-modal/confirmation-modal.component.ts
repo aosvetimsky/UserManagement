@@ -7,14 +7,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ConfirmationModalComponent {
 
-  text: '';
-  title: '';
+  text = '';
+  title = '';
 
   constructor(
     private dialogRef: MatDialogRef<ConfirmationModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { text: '', title: '' }) {
-      this.title = data.title;
-      this.text = data.text;
+    this.title = data.title;
+    this.text = data.text;
   }
 
   async yes() {

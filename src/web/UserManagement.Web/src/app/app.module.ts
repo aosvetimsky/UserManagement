@@ -10,7 +10,6 @@ import { ConfigurationService } from '../services/configuration-service';
 import { UsersComponent } from './user-management/users.component';
 import { LoginComponent } from './accounting/login.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthHttpInterceptor } from '../api/auth-http-interseptor';
 import { ApplicationState } from '../services/application-state';
@@ -24,10 +23,12 @@ import { ToastrModule } from 'ngx-toastr';
 import { ResourceUrlResolver } from '../services/resource-url-resolver';
 import { ConfirmationModalComponent } from '../controls/confirmation-modal/confirmation-modal.component';
 import { ConfirmationService } from '../services/confirmation-service';
+import { AuthGuardFactory } from '../guards/auth-guard';
+import { Permission } from './model/permisson';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'user-management', component: UsersComponent },
+  { path: '', component: UsersComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.UsersView)] },
+  { path: 'user-management', component: UsersComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.UsersView)] },
   { path: 'accounting/login', component: LoginComponent }
 ];
 
@@ -63,6 +64,7 @@ const routes: Routes = [
     AuthorizationService,
     ResourceUrlResolver,
     ConfirmationService,
+    AuthGuardFactory,
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }
   ],
 

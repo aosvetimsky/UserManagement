@@ -9,4 +9,8 @@ export class AuthorizationService {
     hasPermission(permission: string): boolean {
         return (this.appService.permissions || []).includes(permission);
     }
+
+    hasAnyPermission(permissions: string[]): boolean {
+        return (this.appService.permissions || []).some(p => permissions.includes(p));
+    }
 }

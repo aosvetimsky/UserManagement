@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ApiClient } from "../api/api-client";
 import { UserLoginRequest } from "../api/api-client-base.generated";
 import { ApplicationService } from "./application-service";
-import { User, UserIdentity } from "../app/model/User";
+import { User, UserIdentity } from "../app/model/user-identity";
 import { Observable, map } from "rxjs";
 
 @Injectable({ providedIn: 'root' })

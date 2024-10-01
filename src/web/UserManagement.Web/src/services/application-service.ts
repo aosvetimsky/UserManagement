@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ApiClient } from "../api/api-client";
-import { User, UserIdentity } from "../app/model/User";
+import { User, UserIdentity } from "../app/model/user-identity";
 import { ReplaySubject, map } from "rxjs";
 import { ApplicationState } from "./application-state";
 

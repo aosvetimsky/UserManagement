@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { User, UserIdentity } from "../app/model/User";
+import { UserIdentity } from "../app/model/user-identity";
 
 
 [Injectable()]
@@ -14,11 +14,6 @@ export class ApplicationState {
     getAuthToken() {
         const userJson = this.storage.getItem(this.userIdentityKey);
         return userJson ? (JSON.parse(userJson) as UserIdentity).token : undefined;
-    }
-
-    getUser() {
-        const userJson = this.storage.getItem(this.userIdentityKey);
-        return userJson ? (JSON.parse(userJson) as UserIdentity).user : undefined;
     }
 
     getUserIdentity() {

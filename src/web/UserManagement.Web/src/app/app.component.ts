@@ -16,12 +16,18 @@ export class AppComponent implements OnInit {
 
     this.applicationService.$currentUser.subscribe(currentUser => {
       if (!currentUser) {
+        console.log('accounting');
         this.router.navigateByUrl('/accounting/login');
       }
       else {
+        console.log('user');
         this.router.navigateByUrl('/');
       }
     });
+
+    if (!this.applicationService.currentUser) {
+      this.router.navigateByUrl('/accounting/login');
+    }
   }
 
   get userName() {

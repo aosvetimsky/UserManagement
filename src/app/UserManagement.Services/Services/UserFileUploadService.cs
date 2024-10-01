@@ -20,5 +20,6 @@ namespace UserManagement.Services
         }
 
         public bool IsFileContentTypeAllowed(string extension) => AllowedContentTypes.Contains(extension);
+        public bool IsFileLengthSatisfies(long length) => length <= 20_000;
     }
 }

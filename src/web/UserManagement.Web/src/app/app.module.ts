@@ -22,6 +22,8 @@ import { UpdateUserModalComponent } from './user-management/update-user-modal.co
 import { UploadAvatarModalComponent } from './user-management/upload-avatar-modal.component';
 import { ToastrModule } from 'ngx-toastr';
 import { ResourceUrlResolver } from '../services/resource-url-resolver';
+import { ConfirmationModalComponent } from '../controls/confirmation-modal/confirmation-modal.component';
+import { ConfirmationService } from '../services/confirmation-service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -36,7 +38,8 @@ const routes: Routes = [
     LoginComponent,
     AddUserModalComponent,
     UpdateUserModalComponent,
-    UploadAvatarModalComponent
+    UploadAvatarModalComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ const routes: Routes = [
     ApplicationService,
     AuthorizationService,
     ResourceUrlResolver,
+    ConfirmationService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }
   ],
 

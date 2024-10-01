@@ -7,5 +7,6 @@ namespace UserManagement.Services.Contracts
     {
         Task<string> UploadAvatar(IFormFile file);
         bool IsFileContentTypeAllowed(string extension);
+        bool IsFileLengthSatisfies(long length);
     }
 }

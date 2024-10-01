@@ -14,8 +14,8 @@ import { Permission } from '../model/permisson';
 import { ApplicationService } from '../../services/application-service';
 import { UpdateUserModalComponent } from './update-user-modal.component';
 import { UploadAvatarModalComponent } from './upload-avatar-modal.component';
-import { ConfigurationService } from '../../services/configuration-service';
 import { ResourceUrlResolver } from '../../services/resource-url-resolver';
+import { ConfirmationService } from '../../services/confirmation-service';
 
 @Component({
   selector: 'users',
@@ -37,8 +37,8 @@ export class UsersComponent implements OnInit, AfterViewInit {
     private notificationService: NotificationService,
     private authService: AuthorizationService,
     private applicationService: ApplicationService,
-    private configurationService: ConfigurationService,
-    private resourceUrlResolver: ResourceUrlResolver) {
+    private resourceUrlResolver: ResourceUrlResolver,
+    private confirmationService: ConfirmationService) {
   }
 
   ngOnInit(): void {
@@ -78,8 +78,17 @@ export class UsersComponent implements OnInit, AfterViewInit {
   }
 
   async deleteUser(appUser: AppUser) {
-    this.apiClient.usersDELETE(appUser.id!).subscribe(response => {
-      this.reloadUsers();
+    this.confirmationService.confirm('Delete user', 'You sure you want to delete this user?').subscribe(confrimDelete => {
+      if (confrimDelete) {
+        this.apiClient.usersDELETE(appUser.id!).subscribe({
+          next: response => {
+            this.reloadUsers();
+          },
+          error: e => {
+            this.notificationService.notifyError(e.response);
+          }
+        });
+      }
     });
   }
 

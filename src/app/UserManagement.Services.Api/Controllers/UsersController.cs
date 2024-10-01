@@ -92,7 +92,7 @@ namespace UserManagement.Services.Api.Controllers
 
             if (!createUserResult.Succeeded)
             {
-                return BadRequest($"Error creating user {string.Join(',', createUserResult.Errors.Select(e => e.Description))}");
+                return BadRequest($"Error creating user {IdentityErrorsAsString(createUserResult.Errors)}");
             }
 
             var createdUser = await _userManager.FindByEmailAsync(request.Email);
@@ -115,6 +115,15 @@ namespace UserManagement.Services.Api.Controllers
                 return BadRequest("User not found");
             }
 
+            if (user.Email != request.Email)
+            {
+                var userWithProvidedEmail = await _userManager.FindByEmailAsync(request.Email);
+                if (userWithProvidedEmail != null && userWithProvidedEmail.Id != id)
+                {
+                    return BadRequest("User with such email already exists");
+                }
+            }
+
             user.Email = request.Email;
             user.UserName = request.UserName;
 
@@ -122,7 +131,7 @@ namespace UserManagement.Services.Api.Controllers
 
             if (!updateResult.Succeeded)
             {
-                return BadRequest($"Error updating user {string.Join(',', updateResult.Errors.Select(e => e.Description))}");
+                return BadRequest($"Error updating user {updateResult.Errors}");
             }
 
             var updatedUser = await _userManager.FindByEmailAsync(request.Email);
@@ -179,6 +188,11 @@ namespace UserManagement.Services.Api.Controllers
                 return BadRequest("Content type is not allowed");
             }
 
+            if (!_fileUploadService.IsFileLengthSatisfies(request.Avatar.Length))
+            {
+                return BadRequest("File size is exceeded");
+            }
+
             var relativeUrl = await _fileUploadService.UploadAvatar(request.Avatar);
             user.AvatarUrl = relativeUrl;
 
@@ -186,7 +200,7 @@ namespace UserManagement.Services.Api.Controllers
 
             if (!updateResult.Succeeded)
             {
-                return BadRequest($"Error updating user {string.Join(',', updateResult.Errors.Select(e => e.Description))}");
+                return BadRequest($"Error updating user {IdentityErrorsAsString(updateResult.Errors)}");
             }
 
             return new AppUsersUploadAvatarResponse
@@ -216,5 +230,7 @@ namespace UserManagement.Services.Api.Controllers
                 AvatarUrl = user.AvatarUrl
             };
         }
+
+        private string IdentityErrorsAsString(IEnumerable<IdentityError> errors) => string.Join(',', errors.Select(e => e.Description));
     }
 }

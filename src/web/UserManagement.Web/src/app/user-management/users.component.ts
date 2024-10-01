@@ -82,6 +82,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
       if (confrimDelete) {
         this.apiClient.usersDELETE(appUser.id!).subscribe({
           next: response => {
+            this.notificationService.notify('User deleted!');
             this.reloadUsers();
           },
           error: e => {

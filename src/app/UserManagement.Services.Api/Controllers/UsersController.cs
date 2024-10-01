@@ -30,7 +30,7 @@ namespace UserManagement.Services.Api.Controllers
         [Route("search")]
         public async Task<AppUsersSearchResponse> Search([FromQuery] AppUsersSearchRequest request)
         {
-            var query = _userManager.Users;
+            var query = _userManager.Users.OrderBy(u => u.UserName).AsQueryable();
 
             int totalCount = await query.CountAsync();
 
@@ -44,7 +44,7 @@ namespace UserManagement.Services.Api.Controllers
                 query = query.Take(request.Projection.Take.Value);
             }
 
-            var users = await query.OrderBy(u => u.LastSuccessfulEntrance).AsNoTracking().ToListAsync();
+            var users = await query.AsNoTracking().ToListAsync();
 
             var mappedUsers = new List<Transport.AppUser>();
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ConfirmationModalComponent } from "../controls/confirmation-modal/confirmation-modal.component";
 import { MatDialog } from "@angular/material/dialog";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
@@ -10,7 +10,6 @@ export class ConfirmationService {
 
     confirm(title: string, message: string): Observable<boolean> {
         let dialogRef = this.dialog.open(ConfirmationModalComponent, { data: { title: title, message: message } });
-
         return dialogRef.afterClosed();
     }
 }

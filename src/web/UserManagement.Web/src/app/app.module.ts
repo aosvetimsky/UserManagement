@@ -10,7 +10,7 @@ import { ConfigurationService } from '../services/configuration-service';
 import { UsersComponent } from './user-management/users.component';
 import { LoginComponent } from './accounting/login.component';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthHttpInterceptor } from '../api/auth-http-interseptor';
 import { ApplicationState } from '../services/application-state';
 import { AsyncPipe } from '@angular/common';
@@ -25,10 +25,16 @@ import { ConfirmationModalComponent } from '../controls/confirmation-modal/confi
 import { ConfirmationService } from '../services/confirmation-service';
 import { AuthGuardFactory } from '../guards/auth-guard';
 import { Permission } from './model/permisson';
+import { WeatherHistoryComponent } from './weather/history/history.component';
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
+
+PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
   { path: '', component: UsersComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.UsersView)] },
   { path: 'user-management', component: UsersComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.UsersView)] },
+  { path: 'weather/history', component: WeatherHistoryComponent },
   { path: 'accounting/login', component: LoginComponent }
 ];
 
@@ -40,7 +46,8 @@ const routes: Routes = [
     AddUserModalComponent,
     UpdateUserModalComponent,
     UploadAvatarModalComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    WeatherHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +55,9 @@ const routes: Routes = [
     HttpClientModule,
     MaterialComponentsModule,
     ReactiveFormsModule,
+    FormsModule,
     AsyncPipe,
+    PlotlyModule,
     ToastrModule.forRoot({
       positionClass: 'toastr-bottom-right'
     }),

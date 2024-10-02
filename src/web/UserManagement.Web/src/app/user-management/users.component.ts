@@ -16,6 +16,7 @@ import { UpdateUserModalComponent } from './update-user-modal.component';
 import { UploadAvatarModalComponent } from './upload-avatar-modal.component';
 import { ResourceUrlResolver } from '../../services/resource-url-resolver';
 import { ConfirmationService } from '../../services/confirmation-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'users',
@@ -38,7 +39,8 @@ export class UsersComponent implements OnInit, AfterViewInit {
     private authService: AuthorizationService,
     private applicationService: ApplicationService,
     private resourceUrlResolver: ResourceUrlResolver,
-    private confirmationService: ConfirmationService) {
+    private confirmationService: ConfirmationService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -150,6 +152,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
     }
 
     return '/assets/images/no-image.png';
+  }
+
+  weatherHistory() {
+    this.router.navigateByUrl('/weather/history');
   }
 }
 

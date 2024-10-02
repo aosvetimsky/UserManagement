@@ -11,6 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [],
@@ -18,9 +19,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatTableModule,
         CommonModule,
         MatInputModule,
-        // MatSelectModule,
+        MatSelectModule,
          MatCardModule,
-        // MatSortModule,
         MatPaginatorModule,
         MatIconModule,
         MatDividerModule,
@@ -32,9 +32,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     exports: [
         MatTableModule,
         MatInputModule,
-        // MatSelectModule,
+        MatSelectModule,
          MatCardModule,
-        // MatSortModule,
         MatPaginatorModule,
         MatIconModule,
         MatDividerModule,
@@ -42,7 +41,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatDialogModule,
         MatFormFieldModule,
         MatCheckboxModule
-        // MatProgressBarModule,
     ],
 })
 export class MaterialComponentsModule { }

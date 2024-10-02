@@ -487,8 +487,11 @@ export class ApiClientBase {
     /**
      * @return OK
      */
-    getWeatherForecast(): Observable<WeatherForecast[]> {
-        let url_ = this.baseUrl + "/WeatherForecast";
+    weatherHistory(year: number): Observable<WeatherHistoryResponse> {
+        let url_ = this.baseUrl + "/weather/weather-history/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -500,20 +503,20 @@ export class ApiClientBase {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetWeatherForecast(response_);
+            return this.processWeatherHistory(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetWeatherForecast(response_ as any);
+                    return this.processWeatherHistory(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<WeatherForecast[]>;
+                    return _observableThrow(e) as any as Observable<WeatherHistoryResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<WeatherForecast[]>;
+                return _observableThrow(response_) as any as Observable<WeatherHistoryResponse>;
         }));
     }
 
-    protected processGetWeatherForecast(response: HttpResponseBase): Observable<WeatherForecast[]> {
+    protected processWeatherHistory(response: HttpResponseBase): Observable<WeatherHistoryResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -524,14 +527,7 @@ export class ApiClientBase {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(WeatherForecast.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = WeatherHistoryResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1003,13 +999,59 @@ export interface IUserPermissionsResponse {
     permissions?: string[] | undefined;
 }
 
-export class WeatherForecast implements IWeatherForecast {
-    date?: Date;
-    temperatureC?: number;
-    readonly temperatureF?: number;
-    summary?: string | undefined;
+export class WeatherHistoryByMonth implements IWeatherHistoryByMonth {
+    month?: string | undefined;
+    historyEntries?: WeatherHistoryEntry[] | undefined;
 
-    constructor(data?: IWeatherForecast) {
+    constructor(data?: IWeatherHistoryByMonth) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.month = _data["month"];
+            if (Array.isArray(_data["historyEntries"])) {
+                this.historyEntries = [] as any;
+                for (let item of _data["historyEntries"])
+                    this.historyEntries!.push(WeatherHistoryEntry.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): WeatherHistoryByMonth {
+        data = typeof data === 'object' ? data : {};
+        let result = new WeatherHistoryByMonth();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["month"] = this.month;
+        if (Array.isArray(this.historyEntries)) {
+            data["historyEntries"] = [];
+            for (let item of this.historyEntries)
+                data["historyEntries"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IWeatherHistoryByMonth {
+    month?: string | undefined;
+    historyEntries?: WeatherHistoryEntry[] | undefined;
+}
+
+export class WeatherHistoryEntry implements IWeatherHistoryEntry {
+    date?: Date;
+    temperature?: number;
+
+    constructor(data?: IWeatherHistoryEntry) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1021,40 +1063,72 @@ export class WeatherForecast implements IWeatherForecast {
     init(_data?: any) {
         if (_data) {
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.temperatureC = _data["temperatureC"];
-            (<any>this).temperatureF = _data["temperatureF"];
-            this.summary = _data["summary"];
+            this.temperature = _data["temperature"];
         }
     }
 
-    static fromJS(data: any): WeatherForecast {
+    static fromJS(data: any): WeatherHistoryEntry {
         data = typeof data === 'object' ? data : {};
-        let result = new WeatherForecast();
+        let result = new WeatherHistoryEntry();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["date"] = this.date ? formatDate(this.date) : <any>undefined;
-        data["temperatureC"] = this.temperatureC;
-        data["temperatureF"] = this.temperatureF;
-        data["summary"] = this.summary;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["temperature"] = this.temperature;
         return data;
     }
 }
 
-export interface IWeatherForecast {
+export interface IWeatherHistoryEntry {
     date?: Date;
-    temperatureC?: number;
-    temperatureF?: number;
-    summary?: string | undefined;
+    temperature?: number;
 }
 
-function formatDate(d: Date) {
-    return d.getFullYear() + '-' + 
-        (d.getMonth() < 9 ? ('0' + (d.getMonth()+1)) : (d.getMonth()+1)) + '-' +
-        (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
+export class WeatherHistoryResponse implements IWeatherHistoryResponse {
+    entries?: WeatherHistoryByMonth[] | undefined;
+
+    constructor(data?: IWeatherHistoryResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["entries"])) {
+                this.entries = [] as any;
+                for (let item of _data["entries"])
+                    this.entries!.push(WeatherHistoryByMonth.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): WeatherHistoryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new WeatherHistoryResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.entries)) {
+            data["entries"] = [];
+            for (let item of this.entries)
+                data["entries"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IWeatherHistoryResponse {
+    entries?: WeatherHistoryByMonth[] | undefined;
 }
 
 export interface FileParameter {

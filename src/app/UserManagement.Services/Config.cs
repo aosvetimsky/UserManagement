@@ -15,6 +15,7 @@ namespace UserManagement.Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IFileUploadProvider, SelfFileUploadProvider>();
             services.AddScoped<IUserFileUploadService, UserFileUploadService>();
+            services.AddScoped<IWeatherHistoryService, ExternalWeatherHistoryService>();
         }
     }
 }

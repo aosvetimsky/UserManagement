@@ -1,0 +1,9 @@
+<h4>Weather History</h4>
+<mat-form-field>
+  <mat-label>Select year</mat-label>
+  <mat-select name="year" [(ngModel)]="selectedYear" (selectionChange)="selectedYearChanged()">
+    <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>

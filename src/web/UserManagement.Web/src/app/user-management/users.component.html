@@ -1,7 +1,7 @@
 <h4>Users</h4>
 <div class="container">
   <div><button type="submit" color="primary" mat-flat-button (click)="addUser()" *ngIf="showAddUserButton">Add New
-      User</button></div>
+      User</button><button type="submit" color="primary" mat-flat-button (click)="weatherHistory()">View weather history</button></div>
   <div class="">
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

@@ -49,4 +49,12 @@ export class AppComponent implements OnInit {
   async logOut() {
     this.applicationService.removeCurrentUser();
   }
+
+  goToWeatherHistory() {
+    this.router.navigateByUrl('/weather/history');
+  }
+
+  goToUsers() {
+    this.router.navigateByUrl('/');
+  }
 }

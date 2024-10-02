@@ -5,6 +5,7 @@
         UsersView = 1,
         UserDelete,
         UserEdit,
-        UserChangeRole
+        UserChangeRole,
+        WeatherViewHistory
     }
 }

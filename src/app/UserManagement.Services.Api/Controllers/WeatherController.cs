@@ -23,6 +23,7 @@ namespace UserManagement.Services.Api.Controllers
         [Route("weather-history/{year}")]
         public async Task<WeatherHistoryResponse> Get(int year)
         {
+            // generating some fake data
             var historyEntries = Enumerable.Range(1, 12).Select(month => new WeatherHistoryByMonth
             {
                 // there should be some external real weather service api call

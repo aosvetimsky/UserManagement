@@ -21,7 +21,7 @@ namespace UserManagement.Services.Security
         {
             var userRole = await GetUserRole(email);
             // some simple roles to permissions mapping
-            return userRole == UserRole.Admin ? Enum.GetValues<Permission>() : [Permission.UsersView];
+            return userRole == UserRole.Admin ? Enum.GetValues<Permission>() : [Permission.UsersView, Permission.WeatherViewHistory];
         }
 
         // user can have multiple roles, simplifying to a single one

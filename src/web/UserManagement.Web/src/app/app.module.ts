@@ -33,8 +33,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
   { path: '', component: UsersComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.UsersView)] },
-  { path: 'user-management', component: UsersComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.UsersView)] },
-  { path: 'weather/history', component: WeatherHistoryComponent },
+  { path: 'weather/history', component: WeatherHistoryComponent, canActivate: [AuthGuardFactory.requiresPermission(Permission.WeatherViewHistory)] },
   { path: 'accounting/login', component: LoginComponent }
 ];
 

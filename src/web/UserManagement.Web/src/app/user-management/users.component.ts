@@ -153,9 +153,5 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
     return '/assets/images/no-image.png';
   }
-
-  weatherHistory() {
-    this.router.navigateByUrl('/weather/history');
-  }
 }
 

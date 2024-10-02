@@ -17,6 +17,7 @@ export class WeatherHistoryComponent implements AfterViewInit {
 
   private currentYear: number = new Date().getFullYear();
 
+  // show last 20 years
   years: number[] = [...Array(20).keys()].map(y => this.currentYear - y);
   selectedYear: number = this.currentYear;
 

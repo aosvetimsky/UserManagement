@@ -1,13 +1,14 @@
 <h4>Users</h4>
 <div class="container">
   <div><button type="submit" color="primary" mat-flat-button (click)="addUser()" *ngIf="showAddUserButton">Add New
-      User</button><button type="submit" color="primary" mat-flat-button (click)="weatherHistory()">View weather history</button></div>
+      User</button></div>
   <div class="">
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <ng-container matColumnDef="userAvatar">
           <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let user"> <img [src]="getUserAvatarUrl(user)" style="width: 30px; height: 30px;" /></td>
+          <td mat-cell *matCellDef="let user"> <img [src]="getUserAvatarUrl(user)" style="width: 30px; height: 30px;" />
+          </td>
         </ng-container>
         <ng-container matColumnDef="userName">
           <th mat-header-cell *matHeaderCellDef> UserName </th>
@@ -32,7 +33,8 @@
         <ng-container matColumnDef="userActions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let user">
-            <button mat-button aria-label="Upload Avatar" (click)="uploadAvatar(user)" *ngIf="showUploadAvatarButton(user)">
+            <button mat-button aria-label="Upload Avatar" (click)="uploadAvatar(user)"
+              *ngIf="showUploadAvatarButton(user)">
               Upload Avatar
             </button>
             <button mat-button aria-label="Edit User" (click)="editUser(user)">
